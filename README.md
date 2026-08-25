@@ -4,11 +4,11 @@ Este repositório contém uma tarefa para explorar o algoritmo k-Vizinhos Mais P
 
 ## Estrutura do Projeto
 
-- `notebooks/knn.ipynb`: Notebook Jupyter contendo o exercício principal, visualizações e questões.
-- `notebooks/cs231n/`: Módulos Python de suporte contendo a implementação do classificador e utilitários de dados.
+- `src/notebooks/knn.ipynb`: Notebook Jupyter contendo o exercício principal, visualizações e questões.
+- `src/notebooks/cs231n/`: Módulos Python de suporte contendo a implementação do classificador e utilitários de dados.
 - `data/get_datasets.sh` / `data/get_datasets.ps1`: Scripts para baixar o conjunto de dados CIFAR-10.
-- `TAREFA.md`: Instruções originais da tarefa.
-- `RESOLUCAO.md`: Explicacão das modificações de código e respostas da tarefa.
+- `docs/TAREFA.md`: Instruções originais da tarefa.
+- `docs/RESOLUCAO.md`: Explicacão das modificações de código e respostas da tarefa.
 
 ## Requisitos
 
@@ -48,5 +48,5 @@ Siga as instruções dentro do notebook para concluir as implementações e resp
 
 ## Documentos
 
-- [Tarefa](TAREFA.md)
-- [Resolução](RESOLUCAO.md)
+- [Tarefa](docs/TAREFA.md)
+- [Resolução](docs/RESOLUCAO.md)
