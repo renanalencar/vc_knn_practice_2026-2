@@ -41,3 +41,8 @@ This repository contains an assignment for exploring the k-Nearest Neighbors (k-
 - Implement distance matrix computations (with two loops, one loop, and zero loops).
 - Predict labels based on $k$ nearest neighbors.
 - Analyze the performance differences between implementations.
+
+## Documentos
+
+- [Tarefa](TAREFA.md)
+- [Resolução](RESOLUCAO.md)
