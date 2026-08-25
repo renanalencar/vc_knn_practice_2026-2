@@ -1,43 +1,52 @@
-# k-Nearest Neighbors (k-NN) Image Classification
+# Classificação de Imagens com k-Vizinhos Mais Próximos (k-NN)
 
-This repository contains an assignment for exploring the k-Nearest Neighbors (k-NN) algorithm for image classification, based on the Stanford CS231n course materials. The goal of this exercise is to implement and evaluate a k-NN classifier on the CIFAR-10 dataset.
+Este repositório contém uma tarefa para explorar o algoritmo k-Vizinhos Mais Próximos (k-NN) para classificação de imagens, baseado no material do curso CS231n de Stanford. O objetivo deste exercício é implementar e avaliar um classificador k-NN no conjunto de dados CIFAR-10.
 
-## Project Structure
+## Estrutura do Projeto
 
-- `notebooks/knn.ipynb`: Jupyter notebook containing the main exercise, visualizations, and questions.
-- `notebooks/cs231n/`: Supporting Python modules containing the classifier implementation and data utilities.
-- `data/get_datasets.sh` / `data/get_datasets.ps1`: Scripts to download the CIFAR-10 dataset.
-- `TAREFA.md`: Original assignment instructions.
+- `notebooks/knn.ipynb`: Notebook Jupyter contendo o exercício principal, visualizações e questões.
+- `notebooks/cs231n/`: Módulos Python de suporte contendo a implementação do classificador e utilitários de dados.
+- `data/get_datasets.sh` / `data/get_datasets.ps1`: Scripts para baixar o conjunto de dados CIFAR-10.
+- `TAREFA.md`: Instruções originais da tarefa.
+- `RESOLUCAO.md`: Explicacão das modificações de código e respostas da tarefa.
 
-## Requirements
+## Requisitos
 
 - Python >= 3.13
-- A package manager like `uv` (recommended) or `pip`
+- Um gerenciador de pacotes como `uv` (recomendado) ou `pip`
 
-## Setup Instructions
+## Instruções de Configuração
 
-1. **Install Dependencies**
-   The project uses `uv` for dependency management. You can install the required packages (such as `numpy`, `matplotlib`, and `ipykernel`) by running:
-   ```bash
-   uv sync
-   ```
+1. **Instalar Dependências** O projeto utiliza o `uv` para gerenciamento de dependências. Você pode instalar os pacotes necessários (como `numpy`, `matplotlib` e `ipykernel`) executando:
 
-2. **Download the Dataset**
-   Before running the notebook, you need to download the CIFAR-10 dataset. You can do this directly from within the Jupyter notebook (`knn.ipynb`), or manually by running the download script:
-   - **Windows:** Run `.\data\get_datasets.ps1` from a PowerShell console.
-   - **Linux/macOS:** Run `bash data/get_datasets.sh`.
+```bash
+uv sync
+```
 
-3. **Run the Notebook**
-   Start your Jupyter Notebook environment and open `notebooks/knn.ipynb`:
-   ```bash
-   uv run jupyter notebook
-   ```
-   Follow the instructions inside the notebook to complete the implementations and answer the inline questions.
+2. **Baixar o Conjunto de Dados** Antes de executar o notebook, você precisa baixar o conjunto de dados CIFAR-10. Você pode fazer isso diretamente do Jupyter Notebook (`knn.ipynb`) ou manualmente executando o script de download:
 
-## Assignment Goals
+- **Windows:** Execute `.\data\get_datasets.ps1` em um console do PowerShell.
 
-- Understand the basic Image Classification pipeline and cross-validation.
-- Gain proficiency in writing efficient, vectorized Python code using NumPy.
-- Implement distance matrix computations (with two loops, one loop, and zero loops).
-- Predict labels based on $k$ nearest neighbors.
-- Analyze the performance differences between implementations.
+- **Linux/macOS:** Execute `bash data/get_datasets.sh`.
+
+3. **Execute o Notebook**
+Inicie seu ambiente Jupyter Notebook e abra o arquivo `notebooks/knn.ipynb`:
+
+```bash
+uv run jupyter notebook
+```
+
+Siga as instruções dentro do notebook para concluir as implementações e responder às perguntas.
+
+## Objetivos da Tarefa
+
+- Compreender o pipeline básico de Classificação de Imagens e validação cruzada.
+- Adquirir proficiência na escrita de código Python eficiente e vetorizado usando NumPy.
+- Implementar cálculos de matriz de distância (com dois loops, um loop e zero loops).
+- Prever rótulos com base nos $k$ vizinhos mais próximos.
+- Analisar as diferenças de desempenho entre as implementações.
+
+## Documentos
+
+- [Tarefa](TAREFA.md)
+- [Resolução](RESOLUCAO.md)
