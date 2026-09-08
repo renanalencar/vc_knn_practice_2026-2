@@ -10,4 +10,11 @@ dependencies = [
     "ipykernel>=7.3.0",
     "matplotlib>=3.11.1",
     "numpy>=2.5.2",
+    "scipy>=1.18.1",
+    "six>=1.17.0",
 ]
+
+[tool.pyright]
+extraPaths = ["src/notebooks"]
+venvPath = "."
+venv = ".venv"
