@@ -34,7 +34,42 @@ def softmax_loss_naive(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    num_train = X.shape[0]
+    num_classes = W.shape[1]
+
+    # Loop por todas as amostras de treino
+    for i in range(num_train):
+        # 1. Pontuações (logits) para a amostra i
+        scores = X[i].dot(W)  # vetor de tamanho (C,)
+
+        # Estabilidade numérica: subtrai o máximo para evitar overflow na exponencial
+        scores -= np.max(scores)
+
+        # 2. Exponenciais e probabilidades Softmax
+        exp_scores = np.exp(scores)
+        sum_exp_scores = np.sum(exp_scores)
+        probs = exp_scores / sum_exp_scores  # vetor de probabilidades (C,)
+
+        # 3. Perda de entropia cruzada para a amostra i
+        loss += -np.log(probs[y[i]])
+
+        # 4. Gradiente dW para cada classe j
+        for j in range(num_classes):
+            p_j = probs[j]
+            if j == y[i]:
+                # Para a classe correta: (p_j - 1) * x_i
+                dW[:, j] += (p_j - 1.0) * X[i]
+            else:
+                # Para as classes incorretas: p_j * x_i
+                dW[:, j] += p_j * X[i]
+
+    # 5. Média sobre o número de amostras de treino
+    loss /= num_train
+    dW /= num_train
+
+    # 6. Adiciona a regularização L2
+    loss += reg * np.sum(W * W)
+    dW += 2 * reg * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -59,7 +94,35 @@ def softmax_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    num_train = X.shape[0]
+
+    # 1. Calcula as pontuações para todas as amostras
+    scores = X.dot(W)
+
+    # Estabilidade numérica: subtrai o máximo de cada linha (amostra)
+    scores -= np.max(scores, axis=1, keepdims=True)
+
+    # 2. Exponenciais e probabilidades
+    exp_scores = np.exp(scores)
+    probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
+
+    # 3. Calcula a perda (cross-entropy) usando apenas a probabilidade da classe correta
+    correct_logprobs = -np.log(probs[np.arange(num_train), y])
+    loss = np.sum(correct_logprobs) / num_train
+
+    # Adiciona a regularização L2 na perda
+    loss += reg * np.sum(W * W)
+
+    # 4. Calcula o gradiente dW
+    # O gradiente das pontuações (dscores) é p_j para j != y_i, e p_j - 1 para j == y_i
+    dscores = probs.copy()
+    dscores[np.arange(num_train), y] -= 1.0
+    dscores /= num_train
+
+    dW = X.T.dot(dscores)
+
+    # Adiciona a derivada da regularização L2 no dW
+    dW += 2 * reg * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

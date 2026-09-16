@@ -31,13 +31,24 @@ def svm_loss_naive(W, X, y, reg):
     for i in range(num_train):
         scores = X[i].dot(W)
         correct_class_score = scores[y[i]]
+
+        # Contador de margens violadas para a amostra i
+        margins_violated = 0
+
         for j in range(num_classes):
             if j == y[i]:
                 continue
             margin = scores[j] - correct_class_score + 1  # note delta = 1
             if margin > 0:
                 loss += margin
-
+                margins_violated += 1
+                
+                # Gradiente para as classes incorretas que violaram a margem
+                dW[:, j] += X[i]
+        
+        # Gradiente para a classe correta
+        dW[:, y[i]] -= margins_violated * X[i]
+        
     # Right now the loss is a sum over all training examples, but we want it
     # to be an average instead so we divide by num_train.
     loss /= num_train
@@ -54,8 +65,12 @@ def svm_loss_naive(W, X, y, reg):
     # code above to compute the gradient.                                       #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    
+    # Média sobre o número de dados de treino
+    dW /= num_train
 
-    pass
+    # Adiciona a derivada da regularização L2
+    dW += 2 * reg * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -77,8 +92,25 @@ def svm_loss_vectorized(W, X, y, reg):
     # result in loss.                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    
+    num_train = X.shape[0]
 
-    pass
+    # Matriz de pontuações (N, C)
+    scores = X.dot(W)
+    
+    # Extrai a pontuação da classe correta para cada amostra (dimensão N, 1)
+    correct_class_scores = scores[np.arange(num_train), y].reshape(-1, 1)
+    
+    # Calcula a matriz de margens max(0, scores - correct_class_score + 1)
+    margins = np.maximum(0, scores - correct_class_scores + 1)
+    
+    # Zera a margem para as classes corretas (j = y_i)
+    margins[np.arange(num_train), y] = 0
+    
+    # Média da perda de dados + Regularização L2
+    data_loss = np.sum(margins) / num_train
+    reg_loss = reg * np.sum(W * W)
+    loss = data_loss + reg_loss
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -93,7 +125,18 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # Cria uma matriz binária indicando onde a margem foi violada (> 0)
+    binary = (margins > 0).astype(float)
+    
+    # Conta quantas margens foram violadas por exemplo (soma nas colunas)
+    margin_violations_per_example = np.sum(binary, axis=1)
+    
+    # Na coluna da classe correta, subtrai a contagem total de violações
+    binary[np.arange(num_train), y] = -margin_violations_per_example
+    
+    # Gradiente dos dados + derivada da regularização L2
+    dW = X.T.dot(binary) / num_train
+    dW += 2 * reg * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

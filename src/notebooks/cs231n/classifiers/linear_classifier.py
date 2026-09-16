@@ -66,7 +66,10 @@ class LinearClassifier(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            # Sorteia aleatoriamente índices para o mini-batch
+            batch_indices = np.random.choice(num_train, batch_size, replace=True)
+            X_batch = X[batch_indices]
+            y_batch = y[batch_indices]
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -81,7 +84,8 @@ class LinearClassifier(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            # Atualização dos parâmetros (passo do SGD)
+            self.W -= learning_rate * grad
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -111,7 +115,11 @@ class LinearClassifier(object):
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        # 1. Calcula as pontuações para todas as classes (N, C)
+        scores = X.dot(self.W)
+
+        # 2. Escolhe a classe com a maior pontuação para cada exemplo ao longo do eixo das colunas (axis=1)
+        y_pred = np.argmax(scores, axis=1)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return y_pred
