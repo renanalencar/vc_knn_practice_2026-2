@@ -28,7 +28,12 @@ def affine_forward(x, w, b):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # 1. Remodela a entrada de (N, d_1, ..., d_k) para uma matriz 2D (N, D)
+    N = x.shape[0]
+    x_reshaped = x.reshape(N, -1)
+
+    # 2. Computa a multiplicação matricial e adiciona o viés (bias)
+    out = x_reshaped.dot(w) + b
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -61,7 +66,17 @@ def affine_backward(dout, cache):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # 1. Recupera o tamanho N e remolda x para 2D (N, D) como no forward pass
+    N = x.shape[0]
+    x_reshaped = x.reshape(N, -1)
+
+    # 2. Computa os gradientes locais multiplicados pelo gradiente montante (dout)
+    dw = x_reshaped.T.dot(dout)
+    db = np.sum(dout, axis=0)
+    
+    # 3. Computa dx na forma 2D e restaura o formato original de x (N, d_1, ..., d_k)
+    dx_reshaped = dout.dot(w.T)
+    dx = dx_reshaped.reshape(x.shape)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -87,7 +102,8 @@ def relu_forward(x):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # Aplica max(0, x) elemento a elemento
+    out = np.maximum(0, x)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -114,7 +130,8 @@ def relu_backward(dout, cache):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # Multiplica o gradiente vindo de cima pela máscara (x > 0)
+    dx = dout * (x > 0)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -773,7 +790,17 @@ def svm_loss(x, y):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    N = x.shape[0]
+    correct_class_scores = x[np.arange(N), y].reshape(-1, 1)
+    margins = np.maximum(0, x - correct_class_scores + 1.0)
+    margins[np.arange(N), y] = 0
+    loss = np.sum(margins) / N
+
+    dx = np.zeros_like(x)
+    dx[margins > 0] = 1
+    row_sum = np.sum(dx, axis=1)
+    dx[np.arange(N), y] -= row_sum
+    dx /= N
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -802,8 +829,17 @@ def softmax_loss(x, y):
     # TODO: Copy over your solution from A1.
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-    pass
+    N = x.shape[0]
+    shifted_x = x - np.max(x, axis=1, keepdims=True)
+    exp_scores = np.exp(shifted_x)
+    probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
+    
+    correct_logprobs = -np.log(probs[np.arange(N), y])
+    loss = np.sum(correct_logprobs) / N
+    
+    dx = probs.copy()
+    dx[np.arange(N), y] -= 1
+    dx /= N
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
